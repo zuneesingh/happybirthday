@@ -18,8 +18,15 @@ section{padding:4rem 1.25rem;max-width:1000px;margin:auto}
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.25rem;
  background:radial-gradient(circle at 50% 30%,var(--ink2),var(--ink) 70%);position:relative}
 .tag{color:var(--gold);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:1.5rem}
-.portrait{width:min(260px,62vw);aspect-ratio:3/4;border-radius:130px 130px 18px 18px;object-fit:cover;border:4px solid var(--gold);
- box-shadow:0 0 0 10px rgba(246,183,60,.15),0 20px 60px rgba(0,0,0,.5);background:linear-gradient(160deg,var(--rose),var(--lav))}
+.portrait {
+  width: min(360px, 85vw);
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 15px 40px rgba(0,0,0,.3);
+}
 .hero h1{font-size:clamp(2.8rem,10vw,5.5rem);margin:1.5rem 0 .5rem}
 .hero h2{color:var(--rose);font-size:clamp(1.3rem,4vw,1.9rem);font-style:italic;font-weight:500}
 .hero p.msg{max-width:560px;margin:1.2rem auto 0;color:#e9dcf5}
