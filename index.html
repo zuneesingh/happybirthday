@@ -18,22 +18,96 @@ section{padding:4rem 1.25rem;max-width:1000px;margin:auto}
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.25rem;
  background:radial-gradient(circle at 50% 30%,var(--ink2),var(--ink) 70%);position:relative}
 .tag{color:var(--gold);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1.3rem;margin-bottom:1.5rem}
-.portrait{
-  width:auto;
-  height:auto;
-  max-width:min(320px, 80vw);
-  max-height:62vh;
-  display:block;
+
+/* ribbon reveal frame */
+.reveal-frame{
+  position:relative;
+  display:inline-block;
   margin:0 auto;
   border-radius:18px;
   border:4px solid var(--gold);
   box-shadow:0 0 0 10px rgba(246,183,60,.15), 0 20px 60px rgba(0,0,0,.5);
+  overflow:hidden;
+  line-height:0;
 }
+.portrait{
+  display:block;
+  width:auto;
+  height:auto;
+  max-width:min(320px, 80vw);
+  max-height:62vh;
+}
+.gift-cover{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(145deg, var(--ink2), #5a226b);
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+  transition:transform .55s cubic-bezier(.22,1,.36,1), opacity .45s ease;
+}
+.gift-cover:active{cursor:grabbing}
+.gift-cover.opened{
+  transform:translateY(105%);
+  opacity:0;
+  pointer-events:none;
+}
+.ribbon-v{
+  position:absolute;
+  top:0; bottom:0; left:50%;
+  width:26px;
+  transform:translateX(-50%);
+  background:linear-gradient(90deg, #d8961c, var(--gold), #ffe08a, var(--gold), #d8961c);
+  box-shadow:0 0 12px rgba(0,0,0,.35);
+}
+.ribbon-h{
+  position:absolute;
+  left:0; right:0; top:50%;
+  height:26px;
+  transform:translateY(-50%);
+  background:linear-gradient(180deg, #d8961c, var(--gold), #ffe08a, var(--gold), #d8961c);
+  box-shadow:0 0 12px rgba(0,0,0,.35);
+}
+.bow{
+  position:relative;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.35rem;
+  background:var(--ink);
+  border:2px solid var(--gold);
+  border-radius:99px;
+  padding:.65rem 1.2rem;
+  box-shadow:0 8px 24px rgba(0,0,0,.45);
+  line-height:1.2;
+}
+.bow-icon{font-size:1.8rem}
+.pull-hint{
+  font-size:.8rem;
+  font-weight:600;
+  color:var(--gold);
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.bow{transition:transform .2s ease, border-color .2s ease}
+.gift-cover.ready .bow{transform:scale(1.08);border-color:var(--rose)}
+@keyframes nudge{
+  0%,100%{transform:translateY(0)}
+  40%{transform:translateY(22px)}
+  70%{transform:translateY(6px)}
+}
+.gift-cover.nudge{animation:nudge .45s ease}
+
 .hero h1{font-size:clamp(2.8rem,10vw,5.5rem);margin:1.5rem 0 .5rem}
 .hero h2{color:var(--rose);font-size:clamp(1.3rem,4vw,1.9rem);font-style:italic;font-weight:500}
 .hero p.msg{max-width:560px;margin:1.2rem auto 0;color:#e9dcf5}
 button.music{margin-top:1.8rem;background:var(--gold);color:var(--ink);border:0;border-radius:99px;padding:.8rem 1.6rem;font:600 1rem 'Nunito';cursor:pointer}
-button.music:focus-visible,a:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
+button.music:focus-visible,a:focus-visible,.gift-cover:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
 
 /* wishes ticker */
 .ticker{overflow:hidden;background:var(--gold);color:var(--ink);padding:.8rem 0;white-space:nowrap}
@@ -73,7 +147,17 @@ footer{text-align:center;padding:2rem 1rem 3rem;color:var(--lav);font-size:.9rem
 
 <header class="hero">
   <p class="tag" id="tagline"></p>
-  <img class="portrait" id="mainPhoto" alt="">
+  <div class="reveal-frame">
+    <img class="portrait" id="mainPhoto" alt="">
+    <div class="gift-cover" id="giftCover" role="button" tabindex="0" aria-label="Pull ribbon to reveal photo">
+      <div class="ribbon-v"></div>
+      <div class="ribbon-h"></div>
+      <div class="bow">
+        <span class="bow-icon">🎀</span>
+        <span class="pull-hint">Pull ribbon ↓</span>
+      </div>
+    </div>
+  </div>
   <h1 id="heroTitle"></h1>
   <h2 id="heroSub"></h2>
   <p class="msg" id="heroMsg"></p>
@@ -136,10 +220,10 @@ const CONFIG = {
   cardsTitle: "Moments that will be etched in my heart forever",
   cardsSub: "",
   cards: [
-    { icon: "💖", title: "",       text: "Thank you for packing my lunches with small notes." },
+    { icon: "💖", title: "", text: "Thank you for packing my lunches with small notes." },
     { icon: "🤗", title: "", text: "Thank you for covering me with blanket when I was cold." },
-    { icon: "🌱", title: "",    text: "Thank you for your lovely voice notes, especially when I didn't even know I needed them." },
-    { icon: "🎁", title: "",      text: "Thank you for the thoughtful gifts and for reminding me that I deserve little joys too." }
+    { icon: "🌱", title: "", text: "Thank you for your lovely voice notes, especially when I didn't even know I needed them." },
+    { icon: "🎁", title: "", text: "Thank you for the thoughtful gifts and for reminding me that I deserve little joys too." }
   ],
 
   // ---- Photo gallery: add as many as you want ----
@@ -210,6 +294,76 @@ if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
     setTimeout(() => e.remove(), 14000);
   }, 900);
 }
+
+// ribbon pull reveal (drag-only)
+const cover = $('giftCover');
+const hint = cover.querySelector('.pull-hint');
+let startY = 0, currentY = 0, dragging = false, isOpen = false;
+
+const openGift = () => {
+  if (isOpen) return;
+  isOpen = true;
+  dragging = false;
+  cover.style.transition = '';
+  cover.style.transform = '';
+  cover.classList.remove('ready', 'nudge');
+  cover.classList.add('opened');
+};
+
+cover.addEventListener('pointerdown', e => {
+  if (isOpen) return;
+  dragging = true;
+  startY = e.clientY;
+  currentY = 0;
+  cover.classList.remove('nudge');
+  try { cover.setPointerCapture(e.pointerId); } catch {}
+  cover.style.transition = 'none';
+});
+
+cover.addEventListener('pointermove', e => {
+  if (!dragging || isOpen) return;
+  const h = cover.offsetHeight || 300;
+  const threshold = Math.max(95, h * 0.35);
+  currentY = Math.max(0, e.clientY - startY);
+  cover.style.transform = `translateY(${currentY}px)`;
+
+  if (currentY >= h * 0.72) {
+    openGift(); // pulled far enough — opens immediately
+  } else if (currentY >= threshold) {
+    cover.classList.add('ready');
+    hint.textContent = 'Release to reveal ✨';
+  } else {
+    cover.classList.remove('ready');
+    hint.textContent = 'Pull ribbon ↓';
+  }
+});
+
+const endDrag = () => {
+  if (!dragging || isOpen) return;
+  dragging = false;
+  const h = cover.offsetHeight || 300;
+  const threshold = Math.max(95, h * 0.35);
+
+  if (currentY >= threshold) {
+    openGift();
+  } else {
+    cover.style.transition = '';
+    cover.style.transform = '';
+    cover.classList.remove('ready');
+    hint.textContent = 'Pull ribbon ↓';
+    if (currentY < 10) {
+      cover.classList.remove('nudge');
+      void cover.offsetWidth;
+      cover.classList.add('nudge');
+    }
+  }
+};
+
+cover.addEventListener('pointerup', endDrag);
+cover.addEventListener('pointercancel', endDrag);
+cover.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openGift(); }
+});
 </script>
 </body>
 </html>
